@@ -5,6 +5,7 @@ using Cinemachine;
 
 public class FocalPoint : MonoBehaviour
 {
+    // Variáveis públicas que serão configuradas no Unity
     public GameObject player;
     public Camera mainCam;
     public CinemachineVirtualCamera virtualCam;
@@ -18,6 +19,7 @@ public class FocalPoint : MonoBehaviour
     public float smoothness;
     public float clickDelay;
 
+    // Variáveis privadas
     private float lastClick;
     private float desiredZoom;
     private Quaternion desiredRotation;
@@ -27,30 +29,44 @@ public class FocalPoint : MonoBehaviour
 
     private void Start()
     {
+        // Obtém o componente CinemachineTransposer da câmera virtual
         offset = virtualCam.GetCinemachineComponent<CinemachineTransposer>();
+
+        // Obtém a câmera principal
         mainCam = Camera.main;
+
+        // Define a rotação inicial do objeto
         transform.eulerAngles = new Vector3(45, 0, 0);
+
+        // Define o zoom inicial
         desiredZoom = -30;
     }
 
-    // Update is called once per frame
-    void Update()
+    // Update é chamado uma vez por frame
+    private void Update()
     {
+        // Posiciona o objeto na posição do jogador
         transform.position = player.transform.position;
 
-
+        // Verifica se o botão direito do mouse foi pressionado
         if (Input.GetMouseButtonDown(1))
         {
+            // Verifica se foi um duplo clique
             if (Time.time - lastClick <= clickDelay)
             {
+                // Deixa explícito que houve clique duplo
                 doubleClicked = true;
+
+                // Coloca a câmera na sua posição inicial padrão
                 desiredRotation = Quaternion.Euler(45, 0, 0);
                 desiredZoom = -30;
             }
             lastClick = Time.time;
         }
+        // Verifica se o botão direito do mouse está sendo pressionado e não houve duplo clique
         else if (Input.GetMouseButton(1) && (!doubleClicked && !(Input.GetMouseButton(0) || Input.GetMouseButton(2))))
         {
+            // Obtém a direção do movimento do mouse
             Vector3 direction = prevPos - mainCam.ScreenToViewportPoint(Input.mousePosition);
 
             float xDir = direction.x * 180;
@@ -60,6 +76,7 @@ public class FocalPoint : MonoBehaviour
 
             float rotX = transform.eulerAngles.x + yDir * xCamSpeed;
 
+            // Limitando a rotação em X
             if (rotX > maxXRot) { rotX = maxXRot; }
             if (rotX < minXRot) { rotX = minXRot; }
             desiredRotation = Quaternion.Euler(rotX, transform.eulerAngles.y - xDir * yCamSpeed, 0);
@@ -70,10 +87,13 @@ public class FocalPoint : MonoBehaviour
         }
         prevPos = mainCam.ScreenToViewportPoint(Input.mousePosition);
 
+        // Obtém o valor do scroll do mouse
         float scroll = Input.mouseScrollDelta.y;
 
+        // Obtém o zoom atual
         float actualZoom = offset.m_FollowOffset.z;
 
+        // Ajusta o zoom desejado baseado no scroll do mouse
         if (scroll != 0)
         {
             if (scroll > 0 && desiredZoom <= -zoomMax)
@@ -86,14 +106,8 @@ public class FocalPoint : MonoBehaviour
             }
         }
 
+        // Aplica a rotação e o zoom desejados com suavidade
         transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, smoothness);
-
-        offset.m_FollowOffset = Vector3.Lerp
-            (
-                new Vector3(0, 0, actualZoom),
-                new Vector3(0, 0, desiredZoom),
-                smoothness
-            );
+        offset.m_FollowOffset = Vector3.Lerp(new Vector3(0, 0, actualZoom), new Vector3(0, 0, desiredZoom), smoothness);
     }
-
 }
