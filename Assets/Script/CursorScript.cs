@@ -9,7 +9,7 @@ public class CursorScript : MonoBehaviour
     public Texture2D cursorDownTexture;
     public Texture2D cursorGrabTexture;
     public GameObject player;
-    public int rayIgnore;
+    public List<int> rayIgnore;
 
     private Vector2 cursorHotSpot;
 
@@ -18,6 +18,7 @@ public class CursorScript : MonoBehaviour
         cursorHotSpot = new Vector2(0, 0);
         Cursor.SetCursor(cursorUpTexture, cursorHotSpot, CursorMode.Auto);
         destinyHud.transform.position = player.transform.position;
+        Physics.IgnoreLayerCollision(3, 9);
     }
 
     // Update is called once per frame
@@ -44,7 +45,7 @@ public class CursorScript : MonoBehaviour
             
             if (Input.GetMouseButton(0) && !(Input.GetMouseButton(1)|| Input.GetMouseButton(2)))
             {
-                if (!(obj.layer == rayIgnore))
+                if (!rayIgnore.Contains(obj.layer))
                 {
                     destinyHud.SetActive(true);
                     destinyHud.transform.position = raycast.point;
