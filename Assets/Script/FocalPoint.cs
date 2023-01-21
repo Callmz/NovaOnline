@@ -63,7 +63,7 @@ public class FocalPoint : MonoBehaviour
             }
             lastClick = Time.time;
         }
-        // Verifica se o botão direito do mouse está sendo pressionado e não houve duplo clique
+        // Verifica se só o botão direito do mouse está sendo pressionado e não houve duplo clique
         else if (Input.GetMouseButton(1) && (!doubleClicked && !(Input.GetMouseButton(0) || Input.GetMouseButton(2))))
         {
             // Obtém a direção do movimento do mouse
