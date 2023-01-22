@@ -61,7 +61,6 @@ public class CursorScript : MonoBehaviour
                 if (!rayIgnore.Contains(obj.layer))
                 {
                     // Posiciona o destinyHud na posição do raio
-                    destinyHud.SetActive(true);
                     destinyHud.transform.position = raycast.point;
                     destinyHud.transform.Translate(Vector3.forward * -0.2f);
                     // Inicia a animação do destinyHud

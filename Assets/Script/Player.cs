@@ -25,46 +25,8 @@ public class Player : MonoBehaviour
     {
         if (destinyHud.activeSelf)
         {
+            // Move o player até o lugar clicado
             navMeshAgent.destination = destinyHud.transform.position;
-            destinyHud.SetActive(true);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            int rand = Random.Range(1, 4);
-            int quant = Random.Range(1, 1000);
-
-            Stack drop;
-
-            //if (rand == 1)
-            //{
-            //    drop = new Stack(new Item("Maçã", Item.itemType.Consumable), quant);
-            //}
-            //else if (rand == 2)
-            //{
-            //    drop = new Stack(new Item("Madeira", Item.itemType.Material), quant);
-            //}
-            //else
-            //{
-            //    drop = new Stack(new Item("Pá", Item.itemType.Tool), 1);
-            //}
-
-            //int rest;
-            drop = new Stack(new Item("Maçã", Item.itemType.Consumable), 108);
-            Debug.Log($"Drop: {drop.amount}");
-            inventory.AddStack(drop);//, out rest);
-
-
-            //drop.setAmount(rest);
-
-            Debug.Log($"==========INVENTORY==========");
-            foreach (Stack slot in inventory.slots)
-            {
-                Debug.Log($"{slot.item.name} ({slot.amount})");
-            }
-            Debug.Log($"=============================");
-
-            Debug.Log($"Resto: {drop.amount}");
         }
     }
 }

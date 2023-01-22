@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item
-{
-    public itemType type { get; private set; }
+[CreateAssetMenu (fileName = "New Item", menuName = "Item/Create New Item")]
 
-    public string name { get; private set; }
+public class Item : ScriptableObject
+{
+    public itemType type;
+    public string itemName;
+    public Sprite icon;
+
 
     public Item(string name, itemType type)
     {
         this.type = type;
-        this.name = name;
+        this.itemName = name;
     }
     public enum itemType
     {
